@@ -27,6 +27,7 @@ It wrote the code, ran away, and now the game is unplayable.
 
 - This game is intended to let users guess a number from 1 to 100. 
 - When I first played the game, I noticed there were a few bugs that showed the game was not working properly. Here a few bugs:
+  
       1. I noticed that that after submitting my last attempt, the number of attempts left said 1 but I was expecting it to be 0.
       
       2. The hints were not correct. For one game, the secret number was 38. I first guessed number 10, but the hint told me to "Go lower". In another game, the hint told me to go lower than 5 I did and guessed 0 and it told me to go lower again. I was expecting it to say 0 is not an appropriate guess since we have to guess a number from 1 to 100.
