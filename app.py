@@ -1,5 +1,6 @@
 import random
 import streamlit as st
+from logic_utils import check_guess, parse_guess
 
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
@@ -11,40 +12,6 @@ def get_range_for_difficulty(difficulty: str):
     return 1, 100
 
 
-def parse_guess(raw: str):
-    if raw is None:
-        return False, None, "Enter a guess."
-
-    if raw == "":
-        return False, None, "Enter a guess."
-
-    try:
-        if "." in raw:
-            value = int(float(raw))
-        else:
-            value = int(raw)
-    except Exception:
-        return False, None, "That is not a number."
-
-    return True, value, None
-
-
-def check_guess(guess, secret):
-    if guess == secret:
-        return "Win", "🎉 Correct!"
-
-    try:
-        if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
-        else:
-            return "Too Low", "📉 Go LOWER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
@@ -93,7 +60,7 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    st.session_state.attempts = 0
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -104,10 +71,15 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "hint" not in st.session_state:
+    st.session_state.hint = None
+
 st.subheader("Make a guess")
 
 st.info(
     f"Guess a number between 1 and 100. "
+# FIX ME: The attempts left logic is not correct 
+# because the attempts are incremented after the guess is submitted
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
@@ -134,14 +106,20 @@ with col3:
 if new_game:
     st.session_state.attempts = 0
     st.session_state.secret = random.randint(1, 100)
+    st.session_state.status = "playing"
+    st.session_state.hint = None
     st.success("New game started.")
     st.rerun()
+
+if st.session_state.hint:
+    st.warning(st.session_state.hint)
 
 if st.session_state.status != "playing":
     if st.session_state.status == "won":
         st.success("You already won. Start a new game to play again.")
     else:
         st.error("Game over. Start a new game to try again.")
+# FIX ME: The logic here is missing when the game restarts and user wants to play again.
     st.stop()
 
 if submit:
@@ -163,7 +141,9 @@ if submit:
         outcome, message = check_guess(guess_int, secret)
 
         if show_hint:
-            st.warning(message)
+            st.session_state.hint = message
+        else:
+            st.session_state.hint = None
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -186,6 +166,8 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+
+    st.rerun()
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
