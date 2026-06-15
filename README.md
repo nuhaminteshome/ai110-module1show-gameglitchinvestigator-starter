@@ -36,12 +36,12 @@ It wrote the code, ran away, and now the game is unplayable.
 4. After clicking on the New Game button, the game doesn't restart. The only thing that changes is the number of attempts left. When you submit a guess for a new game, it doesn't work. I was expecting the game to reset and when I guessed 1 number the Submit guess button would work and the number of attempts would be reduced by 1.
 - Here are the things I did to fix these issues:
 Fix 5 game logic bugs and refactor helpers into logic_utils
-- parse_guess: add range check to reject guesses outside 1–100
-- check_guess: fix swapped hint messages (Go HIGHER/LOWER were reversed)
-- Fix attempts display off-by-1 by initializing attempts to 0
-- Fix new game not resetting status to "playing", leaving game stuck
-- Add st.rerun() after submit so attempts counter updates immediately
-- Save hint to session_state so it survives the st.rerun() refresh
+     - parse_guess: add range check to reject guesses outside 1–100
+     - check_guess: fix swapped hint messages (Go HIGHER/LOWER were reversed)
+     - Fix attempts display off-by-1 by initializing attempts to 0
+     - Fix new game not resetting status to "playing", leaving game stuck
+     - Add st.rerun() after submit so attempts counter updates immediately
+     - Save hint to session_state so it survives the st.rerun() refresh
 
 
 ## 📸 Demo Walkthrough
