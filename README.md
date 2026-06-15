@@ -25,19 +25,35 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- This game is intended to let users guess a number from 1 to 100. 
+- When I first played the game, I noticed there were a few bugs that showed the game was not working properly. Here a few bugs:
+  
+      1. I noticed that that after submitting my last attempt, the number of attempts left said 1 but I was expecting it to be 0.
+      
+      2. The hints were not correct. For one game, the secret number was 38. I first guessed number 10, but the hint told me to "Go lower". In another game, the hint told me to go lower than 5 I did and guessed 0 and it told me to go lower again. I was expecting it to say 0 is not an appropriate guess since we have to guess a number from 1 to 100.
+      
+      3. The game ends after 6 attempts, although it shows I had 7 attempts.
+      
+      4. After clicking on the New Game button, the game doesn't restart. The only thing that changes is the number of attempts left. When you submit a guess for a new          game, it doesn't work. I was expecting the game to reset and when I guessed 1 number the Submit guess button would work and the number of attempts would be     reduced by 1.
+
+- Here are the things I did to fix these issues:
+     - parse_guess: add range check to reject guesses outside 1–100
+     - check_guess: fix swapped hint messages (Go HIGHER/LOWER were reversed)
+     - Fix attempts display off-by-1 by initializing attempts to 0
+     - Fix new game not resetting status to "playing", leaving game stuck
+     - Add st.rerun() after submit so attempts counter updates immediately
+     - Save hint to session_state so it survives the st.rerun() refresh
+
 
 ## 📸 Demo Walkthrough
 
 Describe your fixed game in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. User enters a guess of 50
+2. Game returns "Go HIGHER"
+3. User enters a guess of 70 → "Go LOWER"
+4. Score updates correctly after each guess
+5. Game ends after the correct guess
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
